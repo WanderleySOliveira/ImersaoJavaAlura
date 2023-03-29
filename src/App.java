@@ -1,7 +1,9 @@
 import model.Filme;
 import parse.JsonParse;
 
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -23,7 +25,6 @@ public class App {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         String body = response.body();
-
 //        System.out.println(body);
 
         //Realizar filtro para pegar somente os dados necessarios
@@ -31,10 +32,19 @@ public class App {
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
 
         //Exibir e manipular dados na aplicação
-        for (Map<String, String> filme: listaDeFilmes) {
-            System.out.println(filme.get("title"));
-            System.out.println(filme.get("image"));
-            System.out.println(filme.get("imDbRating"));
+        var gerador = new StickersGenerate();
+        for (Map<String, String> filme : listaDeFilmes) {
+
+            var urlImagem = filme.get("image");
+            var titulo = filme.get("title");
+
+            InputStream inputStream = new URL(urlImagem).openStream();
+            String nomeArquivo = titulo + ".png";
+
+            gerador.criaStricker(inputStream, nomeArquivo);
+
+                    System.out.println(filme.get("title"));
+            System.out.println(titulo);
             System.out.println();
 
         }
