@@ -46,7 +46,6 @@ public class App {
                     System.out.println(filme.get("title"));
             System.out.println(titulo);
             System.out.println();
-
         }
     }
 }
